@@ -1,0 +1,442 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);font-size:14px;color:var(--color-text-primary)}
+.app{max-width:720px;margin:0 auto;padding:1rem 0}
+.screen{display:none}.screen.active{display:block}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);background:var(--color-background-primary);margin-bottom:1rem}
+.topbar-left{display:flex;align-items:center;gap:10px}
+.logo{font-size:15px;font-weight:500}
+.badge{font-size:11px;padding:3px 8px;border-radius:20px;background:var(--color-background-info);color:var(--color-text-info)}
+.badge.admin{background:var(--color-background-warning);color:var(--color-text-warning)}
+.btn{padding:7px 14px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-primary);cursor:pointer;font-size:13px;font-family:var(--font-sans)}
+.btn:hover{background:var(--color-background-secondary)}
+.btn.primary{background:var(--color-text-primary);color:var(--color-background-primary);border-color:var(--color-text-primary)}
+.btn.primary:hover{opacity:0.85}
+.btn.danger{border-color:var(--color-border-danger);color:var(--color-text-danger)}
+.btn.danger:hover{background:var(--color-background-danger)}
+.btn.success{border-color:var(--color-border-success);color:var(--color-text-success)}
+.btn.success:hover{background:var(--color-background-success)}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:12px}
+.card-title{font-size:13px;color:var(--color-text-secondary);margin-bottom:8px;font-weight:500}
+.big-time{font-size:36px;font-weight:500;letter-spacing:-1px;margin-bottom:4px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.stat{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px}
+.stat-label{font-size:12px;color:var(--color-text-secondary);margin-bottom:4px}
+.stat-value{font-size:20px;font-weight:500}
+.status-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px}
+.dot-active{background:#1D9E75}
+.dot-pause{background:#BA7517}
+.dot-idle{background:#888780}
+.progress-bar-wrap{background:var(--color-background-secondary);border-radius:20px;height:8px;margin:8px 0}
+.progress-bar{height:8px;border-radius:20px;background:#1D9E75;transition:width 0.4s}
+.tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;margin-right:4px}
+.tag-ext{background:#E1F5EE;color:#0F6E56}
+.tag-form{background:#E6F1FB;color:#185FA5}
+.tag-pause{background:#FAEEDA;color:#854F0B}
+.tag-end{background:#FCEBEB;color:#A32D2D}
+.tag-start{background:#EAF3DE;color:#3B6D11}
+.row{display:flex;align-items:center;gap:8px;padding:10px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.row:last-child{border-bottom:none}
+.row-label{flex:1;font-size:13px}
+.row-meta{font-size:12px;color:var(--color-text-secondary)}
+.alert{padding:10px 14px;border-radius:var(--border-radius-md);font-size:13px;margin-bottom:12px;display:none}
+.alert.show{display:block}
+.alert-warn{background:var(--color-background-warning);color:var(--color-text-warning);border:0.5px solid var(--color-border-warning)}
+.alert-ok{background:var(--color-background-success);color:var(--color-text-success);border:0.5px solid var(--color-border-success)}
+.input{width:100%;padding:7px 10px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary);font-family:var(--font-sans);font-size:13px}
+select.input{cursor:pointer}
+.audit-row{font-size:12px;color:var(--color-text-secondary);padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.audit-row:last-child{border-bottom:none}
+.audit-who{font-weight:500;color:var(--color-text-primary)}
+.tabs{display:flex;gap:4px;margin-bottom:1rem;border-bottom:0.5px solid var(--color-border-tertiary);padding-bottom:0}
+.tab{padding:8px 14px;font-size:13px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;color:var(--color-text-secondary)}
+.tab.active{border-bottom:2px solid var(--color-text-primary);color:var(--color-text-primary);font-weight:500}
+.login-wrap{max-width:320px;margin:2rem auto;text-align:center}
+.login-wrap h2{font-size:18px;font-weight:500;margin-bottom:6px}
+.login-wrap p{font-size:13px;color:var(--color-text-secondary);margin-bottom:1.5rem}
+.user-list{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:1.5rem}
+.user-pill{padding:8px 16px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);cursor:pointer;font-size:13px;background:var(--color-background-secondary)}
+.user-pill:hover{background:var(--color-background-primary);border-color:var(--color-border-primary)}
+.user-pill.admin-pill{border-color:var(--color-border-warning);color:var(--color-text-warning)}
+.section-title{font-size:15px;font-weight:500;margin-bottom:12px}
+.notice{font-size:12px;color:var(--color-text-secondary);padding:8px 12px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);margin-top:8px}
+</style>
+
+<h2 class="sr-only">Aplicació de control horari digital compliant amb l'Article 34.9 ET</h2>
+<div class="app">
+
+<div id="screen-login" class="screen active">
+  <div class="login-wrap">
+    <div style="font-size:24px;margin-bottom:12px">&#128336;</div>
+    <h2>Control horari</h2>
+    <p>Registre digital compliant amb l'Art. 34.9 ET · Normativa 2026</p>
+    <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:8px;font-weight:500">Treballadors</div>
+    <div class="user-list" id="worker-pills"></div>
+    <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:8px;font-weight:500">Administrador</div>
+    <div class="user-list">
+      <div class="user-pill admin-pill" onclick="login('admin')">&#128737; Admin RRHH</div>
+    </div>
+  </div>
+</div>
+
+<div id="screen-worker" class="screen">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="logo">&#128336; Control horari</div>
+      <span class="badge" id="worker-badge">Treballador</span>
+    </div>
+    <button class="btn" onclick="logout()">Sortir</button>
+  </div>
+
+  <div class="alert alert-warn" id="alert-forgot">&#9888; Recordatori: tens una jornada oberta de fa més de 9h. Registra la sortida!</div>
+
+  <div class="card">
+    <div class="card-title">Hora actual (servidor)</div>
+    <div class="big-time" id="clock-worker">--:--:--</div>
+    <div style="font-size:13px;color:var(--color-text-secondary)" id="date-worker"></div>
+    <div style="margin-top:12px;font-size:13px" id="worker-status">
+      <span class="status-dot dot-idle"></span>Sense jornada activa
+    </div>
+  </div>
+
+  <div class="grid2">
+    <button class="btn success" id="btn-entrada" onclick="fitxar('entrada')">&#9654; Entrada</button>
+    <button class="btn danger" id="btn-sortida" onclick="fitxar('sortida')" disabled>&#9632; Sortida</button>
+  </div>
+  <div style="margin-top:8px;margin-bottom:12px">
+    <select class="input" id="tipus-pausa">
+      <option value="">— Registrar una pausa/sortida —</option>
+      <option value="pausa-dinar">Pausa dinar</option>
+      <option value="pausa-cafe">Pausa cafè</option>
+      <option value="treball-extern">Treball extern</option>
+      <option value="formacio">Formació</option>
+      <option value="permis">Permís retribuït (metge, etc.)</option>
+    </select>
+    <button class="btn" style="margin-top:6px;width:100%" id="btn-pausa" onclick="fitxar('pausa')" disabled>Registrar pausa / sortida puntual</button>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Progrés setmanal</div>
+    <div style="display:flex;justify-content:space-between;font-size:13px">
+      <span id="hours-done">0h</span><span style="color:var(--color-text-secondary)">de 40h</span>
+    </div>
+    <div class="progress-bar-wrap"><div class="progress-bar" id="progress-bar" style="width:0%"></div></div>
+    <div style="font-size:12px;color:var(--color-text-secondary)" id="progress-label">Porta 0h treballades aquesta setmana</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Historial avui</div>
+    <div id="worker-history-today"><div style="font-size:13px;color:var(--color-text-secondary)">Sense registres avui.</div></div>
+  </div>
+</div>
+
+<div id="screen-admin" class="screen">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="logo">&#128336; Control horari</div>
+      <span class="badge admin">&#128737; Administrador</span>
+    </div>
+    <button class="btn" onclick="logout()">Sortir</button>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('dashboard')">Tauler</div>
+    <div class="tab" onclick="switchTab('audit')">Audit log</div>
+    <div class="tab" onclick="switchTab('export')">Exportar</div>
+  </div>
+
+  <div id="tab-dashboard">
+    <div class="grid3" style="margin-bottom:12px">
+      <div class="stat"><div class="stat-label">Treballadors actius ara</div><div class="stat-value" id="stat-active">0</div></div>
+      <div class="stat"><div class="stat-label">Total fitxatges avui</div><div class="stat-value" id="stat-today">0</div></div>
+      <div class="stat"><div class="stat-label">Hores extres setmana</div><div class="stat-value" id="stat-extra">0h</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Estat de la plantilla en temps real</div>
+      <div id="admin-plantilla"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Corregir un fitxatge (deixa rastre a l'audit log)</div>
+      <div class="grid2" style="margin-bottom:8px">
+        <select class="input" id="corr-worker"><option value="">Treballador...</option></select>
+        <select class="input" id="corr-type">
+          <option value="entrada">Hora entrada</option>
+          <option value="sortida">Hora sortida</option>
+        </select>
+      </div>
+      <div class="grid2" style="margin-bottom:8px">
+        <input type="time" class="input" id="corr-time" />
+        <input type="text" class="input" placeholder="Motiu de la correcció" id="corr-reason" />
+      </div>
+      <button class="btn primary" onclick="corregirFitxatge()">Aplicar correcció amb rastre</button>
+      <div class="alert alert-ok" id="alert-corr" style="margin-top:8px">Correcció registrada a l'audit log.</div>
+    </div>
+  </div>
+
+  <div id="tab-audit" style="display:none">
+    <div class="card">
+      <div class="card-title">Audit log — totes les modificacions queden registrades</div>
+      <div id="audit-list"><div style="font-size:13px;color:var(--color-text-secondary)">Sense modificacions registrades.</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Tots els fitxatges (traçabilitat completa)</div>
+      <div id="all-records"></div>
+    </div>
+  </div>
+
+  <div id="tab-export" style="display:none">
+    <div class="card">
+      <div class="section-title">Exportar registres</div>
+      <div class="grid2" style="margin-bottom:12px">
+        <div>
+          <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:4px">Treballador</div>
+          <select class="input" id="exp-worker"><option value="tots">Tots</option></select>
+        </div>
+        <div>
+          <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:4px">Mes</div>
+          <select class="input" id="exp-month">
+            <option value="5">Maig 2026</option>
+            <option value="4">Abril 2026</option>
+            <option value="3">Març 2026</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn primary" onclick="exportCSV()">&#11015; Exportar CSV (Inspecció de Treball)</button>
+      <div class="notice" style="margin-top:8px">&#128274; Tots els registres es conserven durant 4 anys i estan disponibles de forma immediata per a la Inspecció de Treball, conforme a l'Art. 34.9 ET.</div>
+    </div>
+    <div class="card">
+      <div class="section-title">Resum mensual per treballador</div>
+      <div id="monthly-summary"></div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+const WORKERS = ['Anna García','Pau Martínez','Laia Puig','Marc Torres'];
+const WEEKLY_TARGET = 40;
+let currentUser = null;
+let isAdmin = false;
+let records = JSON.parse(localStorage.getItem('ch_records')||'[]');
+let auditLog = JSON.parse(localStorage.getItem('ch_audit')||'[]');
+
+function saveData(){localStorage.setItem('ch_records',JSON.stringify(records));localStorage.setItem('ch_audit',JSON.stringify(auditLog));}
+
+function serverTime(){return new Date().toISOString();}
+
+function login(who){
+  currentUser = who;
+  isAdmin = who === 'admin';
+  show(isAdmin ? 'screen-admin' : 'screen-worker');
+  if(!isAdmin){
+    document.getElementById('worker-badge').textContent = who;
+    renderWorker();
+  } else {
+    renderAdmin();
+  }
+}
+function logout(){currentUser=null;isAdmin=false;show('screen-login');}
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+
+function buildWorkerPills(){
+  const c = document.getElementById('worker-pills');
+  c.innerHTML = '';
+  WORKERS.forEach(w=>{
+    const d = document.createElement('div');
+    d.className='user-pill';
+    d.textContent=w;
+    d.onclick=()=>login(w);
+    c.appendChild(d);
+  });
+}
+buildWorkerPills();
+
+function fillWorkerSelects(){
+  ['corr-worker','exp-worker'].forEach(id=>{
+    const s = document.getElementById(id);
+    const base = id==='exp-worker'?'<option value="tots">Tots</option>':'<option value="">Treballador...</option>';
+    s.innerHTML = base + WORKERS.map(w=>`<option value="${w}">${w}</option>`).join('');
+  });
+}
+
+function todayStr(){return new Date().toISOString().slice(0,10);}
+function fmtTime(iso){return new Date(iso).toLocaleTimeString('ca-ES',{hour:'2-digit',minute:'2-digit',second:'2-digit'});}
+function fmtDuration(ms){const h=Math.floor(ms/3600000),m=Math.floor((ms%3600000)/60000);return h+'h '+String(m).padStart(2,'0')+'min';}
+
+function fitxar(tipus){
+  const now = serverTime();
+  const tipusPausa = document.getElementById('tipus-pausa').value;
+  if(tipus==='pausa' && !tipusPausa){alert('Selecciona el tipus de pausa o sortida.');return;}
+  const rec = {id:Date.now(),worker:currentUser,tipus:tipus==='pausa'?tipusPausa:tipus,ts:now,date:todayStr(),modified:false};
+  records.push(rec);
+  saveData();
+  renderWorker();
+}
+
+function getWorkerRecordsToday(worker){return records.filter(r=>r.worker===worker&&r.date===todayStr());}
+function getWorkerStatus(worker){
+  const recs = getWorkerRecordsToday(worker);
+  if(!recs.length) return 'idle';
+  const last = recs[recs.length-1];
+  if(last.tipus==='entrada') return 'active';
+  if(last.tipus==='sortida') return 'finished';
+  return 'paused';
+}
+
+function calcWorkedHoursToday(worker){
+  const recs = getWorkerRecordsToday(worker).filter(r=>r.tipus==='entrada'||r.tipus==='sortida');
+  let total=0, entry=null;
+  recs.forEach(r=>{if(r.tipus==='entrada') entry=new Date(r.ts);else if(r.tipus==='sortida'&&entry){total+=new Date(r.ts)-entry;entry=null;}});
+  if(entry) total+=Date.now()-entry;
+  return total;
+}
+
+function calcWeeklyHours(worker){
+  const now=new Date();const day=now.getDay()||7;
+  const monday=new Date(now);monday.setDate(now.getDate()-day+1);monday.setHours(0,0,0,0);
+  const recs=records.filter(r=>r.worker===worker&&new Date(r.ts)>=monday&&(r.tipus==='entrada'||r.tipus==='sortida'));
+  let total=0,entry=null;
+  recs.forEach(r=>{if(r.tipus==='entrada') entry=new Date(r.ts);else if(r.tipus==='sortida'&&entry){total+=new Date(r.ts)-entry;entry=null;}});
+  if(entry) total+=Date.now()-entry;
+  return total;
+}
+
+function renderWorker(){
+  const status = getWorkerStatus(currentUser);
+  const btnE = document.getElementById('btn-entrada');
+  const btnS = document.getElementById('btn-sortida');
+  const btnP = document.getElementById('btn-pausa');
+  btnE.disabled = status==='active';
+  btnS.disabled = status!=='active';
+  btnP.disabled = status!=='active';
+
+  const statusEl = document.getElementById('worker-status');
+  if(status==='active'){statusEl.innerHTML='<span class="status-dot dot-active"></span>Jornada activa';}
+  else if(status==='finished'){statusEl.innerHTML='<span class="status-dot dot-idle"></span>Jornada finalitzada';}
+  else if(status==='paused'){statusEl.innerHTML='<span class="status-dot dot-pause"></span>En pausa / sortida puntual';}
+  else{statusEl.innerHTML='<span class="status-dot dot-idle"></span>Sense jornada activa';}
+
+  const weekMs = calcWeeklyHours(currentUser);
+  const weekH = weekMs/3600000;
+  const pct = Math.min(100,Math.round(weekH/WEEKLY_TARGET*100));
+  document.getElementById('hours-done').textContent = weekH.toFixed(1)+'h';
+  document.getElementById('progress-bar').style.width=pct+'%';
+  document.getElementById('progress-label').textContent=`Porta ${weekH.toFixed(1)}h de ${WEEKLY_TARGET}h aquesta setmana (${pct}%)`;
+
+  const todayRecs = getWorkerRecordsToday(currentUser);
+  const histEl = document.getElementById('worker-history-today');
+  if(!todayRecs.length){histEl.innerHTML='<div style="font-size:13px;color:var(--color-text-secondary)">Sense registres avui.</div>';return;}
+  histEl.innerHTML = todayRecs.map(r=>{
+    const tagClass = r.tipus==='entrada'?'tag-start':r.tipus==='sortida'?'tag-end':r.tipus.startsWith('treball')?'tag-ext':r.tipus.startsWith('formac')?'tag-form':'tag-pause';
+    const mod = r.modified?'<span style="font-size:11px;color:var(--color-text-warning)"> (modificat per admin)</span>':'';
+    return `<div class="row"><div class="row-label"><span class="tag ${tagClass}">${r.tipus}</span>${mod}</div><div class="row-meta">${fmtTime(r.ts)}</div></div>`;
+  }).join('');
+
+  const workedMs = calcWorkedHoursToday(currentUser);
+  if(workedMs > 9*3600000 && status==='active') document.getElementById('alert-forgot').classList.add('show');
+  else document.getElementById('alert-forgot').classList.remove('show');
+}
+
+function renderAdmin(){
+  fillWorkerSelects();
+  const active = WORKERS.filter(w=>getWorkerStatus(w)==='active').length;
+  const todayAll = records.filter(r=>r.date===todayStr()).length;
+  let extraH = 0;
+  WORKERS.forEach(w=>{const wh=calcWeeklyHours(w)/3600000;if(wh>WEEKLY_TARGET)extraH+=wh-WEEKLY_TARGET;});
+  document.getElementById('stat-active').textContent=active;
+  document.getElementById('stat-today').textContent=todayAll;
+  document.getElementById('stat-extra').textContent=extraH.toFixed(1)+'h';
+
+  const pl = document.getElementById('admin-plantilla');
+  pl.innerHTML = WORKERS.map(w=>{
+    const st=getWorkerStatus(w);
+    const dotCls=st==='active'?'dot-active':st==='paused'?'dot-pause':'dot-idle';
+    const wkH=(calcWeeklyHours(w)/3600000).toFixed(1);
+    const todH=(calcWorkedHoursToday(w)/3600000).toFixed(1);
+    return `<div class="row"><div style="display:flex;align-items:center;gap:8px;flex:1"><span class="status-dot ${dotCls}"></span><span class="row-label">${w}</span></div><div class="row-meta">${todH}h avui · ${wkH}h setmana</div></div>`;
+  }).join('');
+
+  renderAudit();
+  renderAllRecords();
+  renderMonthlySummary();
+}
+
+function renderAudit(){
+  const el = document.getElementById('audit-list');
+  if(!auditLog.length){el.innerHTML='<div style="font-size:13px;color:var(--color-text-secondary)">Sense modificacions registrades.</div>';return;}
+  el.innerHTML = auditLog.slice().reverse().map(a=>`<div class="audit-row"><span class="audit-who">Admin RRHH</span> ha modificat <strong>${a.worker}</strong> · ${a.field} · Original: ${a.original} → Nou: ${a.newVal} · Motiu: "${a.reason}" · ${new Date(a.ts).toLocaleString('ca-ES')}</div>`).join('');
+}
+
+function renderAllRecords(){
+  const el = document.getElementById('all-records');
+  const today = records.filter(r=>r.date===todayStr());
+  if(!today.length){el.innerHTML='<div style="font-size:13px;color:var(--color-text-secondary)">Sense fitxatges avui.</div>';return;}
+  el.innerHTML=today.map(r=>{
+    const tagClass=r.tipus==='entrada'?'tag-start':r.tipus==='sortida'?'tag-end':'tag-pause';
+    return `<div class="row"><div class="row-label" style="font-size:13px">${r.worker}</div><span class="tag ${tagClass}">${r.tipus}</span><div class="row-meta">${fmtTime(r.ts)}</div></div>`;
+  }).join('');
+}
+
+function renderMonthlySummary(){
+  const el = document.getElementById('monthly-summary');
+  el.innerHTML = WORKERS.map(w=>{
+    const wRecs=records.filter(r=>r.worker===w&&r.date&&r.date.startsWith('2026-05')&&(r.tipus==='entrada'||r.tipus==='sortida'));
+    let total=0,entry=null;
+    wRecs.sort((a,b)=>a.ts>b.ts?1:-1).forEach(r=>{if(r.tipus==='entrada') entry=new Date(r.ts);else if(r.tipus==='sortida'&&entry){total+=new Date(r.ts)-entry;entry=null;}});
+    return `<div class="row"><div class="row-label">${w}</div><div class="row-meta">${(total/3600000).toFixed(1)}h · Maig 2026</div></div>`;
+  }).join('');
+}
+
+function corregirFitxatge(){
+  const worker=document.getElementById('corr-worker').value;
+  const tipo=document.getElementById('corr-type').value;
+  const time=document.getElementById('corr-time').value;
+  const reason=document.getElementById('corr-reason').value;
+  if(!worker||!time||!reason){alert('Omple tots els camps per deixar rastre legal.');return;}
+  const todayRecs=records.filter(r=>r.worker===worker&&r.date===todayStr());
+  const target=todayRecs.find(r=>r.tipus===tipo);
+  const originalTime = target ? fmtTime(target.ts) : '(no existia)';
+  if(target){target.ts=new Date(todayStr()+'T'+time).toISOString();target.modified=true;}
+  auditLog.push({ts:serverTime(),worker,field:tipo,original:originalTime,newVal:time,reason});
+  saveData();
+  document.getElementById('alert-corr').classList.add('show');
+  setTimeout(()=>document.getElementById('alert-corr').classList.remove('show'),3000);
+  renderAdmin();
+}
+
+function exportCSV(){
+  const worker=document.getElementById('exp-worker').value;
+  const month='2026-0'+document.getElementById('exp-month').value;
+  const data=records.filter(r=>(worker==='tots'||r.worker===worker)&&r.date&&r.date.startsWith(month));
+  if(!data.length){alert('Sense dades per exportar.');return;}
+  const header='Treballador,Tipus,Data,Hora,Modificat\n';
+  const rows=data.map(r=>`${r.worker},${r.tipus},${r.date},${fmtTime(r.ts)},${r.modified?'Sí':'No'}`).join('\n');
+  const blob=new Blob([header+rows],{type:'text/csv;charset=utf-8;'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`registre_horari_${month}.csv`;a.click();
+}
+
+function switchTab(tab){
+  ['dashboard','audit','export'].forEach(t=>{
+    document.getElementById('tab-'+t).style.display=t===tab?'':'none';
+  });
+  document.querySelectorAll('.tab').forEach((el,i)=>{
+    el.classList.toggle('active',['dashboard','audit','export'][i]===tab);
+  });
+  if(tab==='audit'||tab==='export') renderAdmin();
+}
+
+function updateClocks(){
+  const now=new Date();
+  const ts=now.toLocaleTimeString('ca-ES');
+  const dt=now.toLocaleDateString('ca-ES',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  const wEl=document.getElementById('clock-worker');
+  const dEl=document.getElementById('date-worker');
+  if(wEl) wEl.textContent=ts;
+  if(dEl) dEl.textContent=dt;
+}
+setInterval(updateClocks,1000);
+updateClocks();
+</script>
